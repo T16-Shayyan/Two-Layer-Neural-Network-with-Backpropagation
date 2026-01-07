@@ -1,39 +1,6 @@
 #|
-PROJECT 2
-
 Write a two-layer backpropagation neural network.
 
-Due the evening of SATURDAY, October 18, at MIDNIGHT.
-
-You will send this project, filled out and working, as a SINGLE FILE
-to your Grader as an attachment 
-
-CS480 Project 2 Submission
-
-[Note:]
-I have two versions of this code: one using arrays and one using
-lists.  I've decided to provide you with the the list version of
-the code rather than the array version.  The array version is
-harder to write but also harder to introduce bugs.
-
-
-Be certain to see the questions at the end of the file.  
-
-Note that this is a STOCHASTIC (partially random) system and so 
-you need to run a number of times to assess whether the system 
-is really working well -- sometimes it just gets lucky (or 
-doesn't).  What is "a number of times"?  I'd say: 5-10 runs per 
-experiment to get an idea, and 30 to really be able to make a 
-claim.  I'd also be interested in modifications you made to the
-project to add interesting gizmos.
-
-In actuality this project isn't particularly difficult.  It's 
-really just a few lines of code. You should be able to get this 
-in almost immediately.
-
-In class I mentioned that you can do backpropagation entirely with
-matrix manipulation, and it's a LOT easier.  Well, it is.  Here are
-the rules for doing backpropagation:
 
 "."  (a dot)    means a standard matrix multiply, as in:  C = A . B
 no dot          means element-by-element multiply.  Each element in
@@ -53,9 +20,6 @@ alpha (...)     multiply all elements in the matrix by the scalar
 value alpha
 
 
-
-Here I'm using slightly different notation than in the lecture notes,
-but you should be able to to figure it out.
 
 c is the expected output vector
 i is the provided input vector
@@ -78,28 +42,11 @@ hdelta = (h (1 - h) (tr[w] . odelta) )
 w = w + alpha (odelta . tr[h])
 v = v + alpha (hdelta . tr[i])
 
-Also for your enlightenment, the error metric ( 1/2 SUM_i (Ci - Oi)^2 )
+the error metric ( 1/2 SUM_i (Ci - Oi)^2 )
 can be matrixified simply as:
 
 error =  0.5 ( tr[c - o] . (c - o) )
 
-...of course error would be a 1x1 matrix -- you should be able to extract
-the number out of that.  :-)
-
-odelta and hdelta are temporary matrix variables to simplify the
-equations for you.  You should be able to figure out what 
-i, h, c, o, v, and w are.  :-) BE CAREFUL not to mix up
-matrix multiply with element-by-element multiply!
-
-Important hint: the matrix manipulation functions I have provided do NOT
-have error checking in them.  If you multiply two matrices together
-which are mismatched size-wise, for example, the matrix multiply
-function will truncate each matrix until they *are* matched size-wise.
-Thus you should check to make sure that your matrices are coming out
-right.  One good hint is to make sure your W and V matrices don't
-change size after backpropagation!  :-)
-
-You will need to implement the following functions:
 
 SIGMOID
 NET-ERROR
@@ -107,15 +54,7 @@ FORWARD-PROPAGATE
 BACK-PROPAGATE
 NET-BUILD
 SIMPLE-GENERALIZATION
-K-FOLD-VALIDATION             (Extra Credit Only, see below)
 
-The long functions are back-propagate and net-build.
-Hint: BACK-PROPAGATE will have to reimplement most of the FORWARD-PROPAGATE
-function, but it doesn't help much to call FORWARD-PROPAGATE
-from within BACK-PROPAGATE.
-
-After you have implemented these functions, you will test them out on
-some data.  I have chosen several problems:
 
 1. XOR and NAND   (Well, actually EQUAL rather than XOR, but we'll 
 pretend it's XOR -- they're isomorphic so it doesn't matter much).
@@ -132,99 +71,6 @@ regression problem with a one-dimensional output.
 classes.  I have chosen to encode those three classes as 
 corners of a three-dimensional hypercube (you'll see).
 
-I have built in a bias in my conversion function so you can forget about
-that issue.  We won't bother about bias units in the hidden layer.
-
-For the NAND and XOR problems, you have to get the code working.  This usually 
-requires several runs before it will converge to a perfect solution.
-
-Once you have gotten NAND and XOR working, try running the other problems and
-seeing how they generalize.
-
-
-
-You need to provide:
-
-1. Your working code WITHOUT K-FOLD VALIDATION
-(just don't implement that function)
-2. Your 500-word report.
-
-
-
-EXTRA CREDIT. If you like you might try one or two of the following.   Add a sentence in the body of your email to alert the Grader that you are attempting extra credit.  Please do not submit extra credit unless you're pretty sure it's correct: half-baked attempts get no credit and it just puts a lot of burden on the Grader and TA.
-
-3. Implement K-fold Validation.
-
-4. Try out an additional classification or regression problem from the
-UCI Machine Learning Repository (see https://archive.ics.uci.edu/ml/)
-You will need to convert the data to the appropriate form we're using
-here, but that shouldn't be too difficult.  I would avoid data that
-is time-series, "multivariate" (meaning a mixture of categorical and
-real-valued attributes), and "missing values").  Include your
-additional problem as a separate lisp file (ending in .lisp) as an
-attachment for the TA.  Indicate your results on that file as part
-of your 500-word report.  If you're doing a binary classifier,
-remember not to allow 0 or 1 as output values, since the neural network
-cannot reach them.
-
-
-
-
-ABOUT THE MATRICES
-
-Here's some info about my matrix-manipulation functions, to help you
-in debugging....
-
-A matrix as follows:
-
-2   3   7
-6   2   4
-5   2   9
-
-...takes the form:
-
-'( (2   3   7)
-(6   2   4)
-(5   2   9) )
-
-...so it's in row-major order.  Traditionally, a matrix's elements
-are accessed as Wij,  where i is the ROW and j is the COLUMN.  Also,
-rows and columns start with 1, not 0.  I'll adhere to those standards.
-
-I'm implementing matrices as lists of lists.  That includes vectors
-(1-dimensional matrices).  So the row vector:
-
-3   4   5
-
-...takes the form:
-
-'( (3   4   5) )
-
-...and the column vector
-
-3
-5
-9
-
-...takes the form:
-
-'( (3)
-(5)
-(9) )
-
-All the matrix manipulation functions I've given are non-destructive.
-
-
-
-
-ABOUT *VERIFY*
-
-The matrix math code can be run with or without verification that the
-various matrices are the right size for the operations.  Without checking
-it's a little slower.  By default the checks are on:  *verify* is set to t
-
-You can turn off the checks by setting *verify* to nil but only do so after
-you know for a fact that your network is operating properly.
 |#
 
 
@@ -242,8 +88,7 @@ pretty efficient.  Returns the shuffled version of the list."
 
 (defparameter *verify* t)
 
-;;; hmmm, openmcl keeps signalling an error of a different kind
-;;; when I throw an error -- a bug in openmcl?  dunno...
+
 (defun throw-error (str)
   (error (make-condition 'simple-error :format-control str)))
 
@@ -394,7 +239,7 @@ can be fed into NET-LEARN.  Also adds a bias unit of 0.5 to the input."
 
 ;;; Functions you need to implement
 
-;; IMPLEMENT THIS FUNCTION
+
 
 (defun sigmoid (u)
   "Sigmoid function applied to the number u"
@@ -405,7 +250,7 @@ can be fed into NET-LEARN.  Also adds a bias unit of 0.5 to the input."
 
 ;; output and correct-output are both column-vectors
 
-;; IMPLEMENT THIS FUNCTION
+
 
 (defun net-error (output correct-output)
   "Returns (as a scalar value) the error between the output and correct vectors"
@@ -420,11 +265,7 @@ can be fed into NET-LEARN.  Also adds a bias unit of 0.5 to the input."
 
 ;; a single datum is of the form
 ;; (--input-column-vector--  -- output-column-vector--)
-;;
-;; Notice that this is different from the raw data provided in the problems below.
-;; You can convert the raw data to this column-vector form using CONVERT-DATA
 
-;; IMPLEMENT THIS FUNCTION
 
 (defun forward-propagate (datum v w)
   "Returns as a vector the output of the OUTPUT units when presented
@@ -439,7 +280,7 @@ the datum as input."
       o)))
 
 
-;; IMPLEMENT THIS FUNCTION
+
 ;;i = input of (first datanum)  amd c is output
 (defun back-propagate (datum alpha v w)
   "Back-propagates a datum through the V and W matrices,
@@ -489,12 +330,9 @@ In any case, returns x"
 ;;  ...
 ;; )
 ;;
-;;
-;; Notice that this is different from the raw data provided in the problems below.
-;; You can convert the raw data to this column-vector form using CONVERT-DATA
 
 
-;;; IMPLEMENT THIS FUNCTION
+
 
 (defun net-build (data num-hidden-units alpha initial-bounds max-iterations modulo &optional print-all-errors)
   "Builds a neural network with num-hidden-units and the appropriate number
@@ -551,15 +389,7 @@ and the final W matrix of the learned network."
 
 
 
-;; For this function, you should pass in the data just like it's defined
-;; in the example problems below (that is, not in the "column vector" format
-;; used by NET-BUILD.  Of course, if you need to call NET_BUILD from this function
-;; you can alway convert this data to column-vector format using CONVERT-DATA within
-;; the SIMPLE-GENERALIZATION function.
-;;
-;; Yes, this is ridiculously inconsistent.  Deal with it.  :-)
 
-;;; IMPLEMENT THIS FUNCTION
 
 (defun simple-generalization (data num-hidden-units alpha initial-bounds max-iterations)
   "Given a set of data, trains a neural network on the first half
